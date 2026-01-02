@@ -1,164 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vidrace — Find Viral Clips by Description</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidrace — Find Viral Clips</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+}
 
-    header {
-      padding: 28px 16px;
-      text-align: center;
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
-    }
+header {
+  text-align: center;
+  padding: 30px 16px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2.2rem;
-      font-weight: 800;
-    }
+header h1 {
+  margin: 0;
+  font-size: 2.3rem;
+  font-weight: 800;
+}
 
-    header p {
-      margin-top: 8px;
-      opacity: 0.95;
-    }
+header p {
+  margin-top: 8px;
+  opacity: 0.95;
+}
 
-    main {
-      max-width: 900px;
-      margin: auto;
-      padding: 24px 16px;
-    }
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 24px 16px;
+}
 
-    .search-box {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
+.search-box {
+  display: flex;
+  gap: 10px;
+}
 
-    input {
-      flex: 1;
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-      font-size: 1rem;
-    }
+input {
+  flex: 1;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+}
 
-    button {
-      padding: 14px 18px;
-      border-radius: 10px;
-      border: none;
-      background: #2563eb;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: 600;
-    }
+button {
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
 
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-top: 28px;
-    }
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 26px;
+}
 
-    .tab {
-      padding: 10px 16px;
-      background: #1e293b;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
+.tab {
+  padding: 10px 16px;
+  background: #1e293b;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
 
-    .tab.active {
-      background: #2563eb;
-    }
+.tab.active {
+  background: #2563eb;
+}
 
-    .results {
-      margin-top: 22px;
-    }
+.results {
+  margin-top: 24px;
+}
 
-    .card {
-      background: #1e293b;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
+.card {
+  background: #1e293b;
+  padding: 18px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
 
-    .card span {
-      flex: 1;
-      font-size: 0.95rem;
-      opacity: 0.9;
-    }
+.card-top {
+  font-size: 1rem;
+  margin-bottom: 14px;
+  opacity: 0.95;
+}
 
-    .dropdown {
-      position: relative;
-    }
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-    .dropbtn {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
+.save-btn {
+  background: #22c55e;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #022c22;
+}
 
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #1e293b;
-      min-width: 170px;
-      border-radius: 10px;
-      margin-top: 8px;
-      z-index: 1;
-      overflow: hidden;
-    }
+.dropdown {
+  position: relative;
+}
 
-    .dropdown-content a {
-      color: #e5e7eb;
-      padding: 12px 14px;
-      text-decoration: none;
-      display: block;
-      font-size: 0.85rem;
-    }
+.dropbtn {
+  background: #2563eb;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
 
-    .dropdown-content a:hover {
-      background-color: #334155;
-    }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: #1e293b;
+  border-radius: 12px;
+  margin-top: 8px;
+  min-width: 180px;
+  overflow: hidden;
+  z-index: 10;
+}
 
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
+.dropdown-content a {
+  display: block;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: #e5e7eb;
+}
 
-    .save-btn {
-      background: #22c55e;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-    }
+.dropdown-content a:hover {
+  background: #334155;
+}
 
-    footer {
-      text-align: center;
-      padding: 32px 10px;
-      opacity: 0.6;
-      font-size: 0.85rem;
-    }
-  </style>
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  opacity: 0.6;
+  font-size: 0.85rem;
+}
+</style>
 </head>
 
 <body>
@@ -170,102 +172,123 @@
 
 <main>
 
-  <div class="search-box">
-    <input id="query" placeholder="e.g. guy slips on stage during award show" />
-    <button onclick="searchClip()">Search</button>
-  </div>
+<div class="search-box">
+  <input id="query" placeholder="e.g. guy slips on stage during award show">
+  <button onclick="searchClip()">Search</button>
+</div>
 
-  <div class="tabs">
-    <div class="tab active" onclick="showSearch()">Search</div>
-    <div class="tab" onclick="showTrending()">Trending</div>
-    <div class="tab" onclick="showSaved()">Saved</div>
-  </div>
+<div class="tabs">
+  <div class="tab active" onclick="showSearch()">Search</div>
+  <div class="tab" onclick="showTrending()">Trending</div>
+  <div class="tab" onclick="showSaved()">Saved</div>
+</div>
 
-  <div class="results" id="results"></div>
+<div class="results" id="results"></div>
 
 </main>
 
-<footer>
-  © 2026 Vidrace
-</footer>
+<footer>© 2026 Vidrace</footer>
 
 <script>
-  let currentQuery = "";
+let currentResults = [];
 
-  function searchClip() {
-    const q = document.getElementById("query").value.trim();
-    if (!q) return;
-    currentQuery = q;
+function setActiveTab(i) {
+  document.querySelectorAll(".tab").forEach((t,idx)=>{
+    t.classList.toggle("active", idx === i);
+  });
+}
 
-    const yt = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
-    const tt = "https://www.tiktok.com/search?q=" + encodeURIComponent(q);
-    const ig = "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q);
-    const fb = "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q);
-    const x  = "https://twitter.com/search?q=" + encodeURIComponent(q);
+function searchClip() {
+  setActiveTab(0);
+  const q = document.getElementById("query").value.trim();
+  if (!q) return;
 
-    document.getElementById("results").innerHTML = `
+  currentResults = [{
+    query: q,
+    yt: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
+    tt: "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
+    ig: "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
+    fb: "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q),
+    x:  "https://twitter.com/search?q=" + encodeURIComponent(q)
+  }];
+
+  renderResults(currentResults, true);
+}
+
+function renderResults(list, allowSave) {
+  const results = document.getElementById("results");
+  results.innerHTML = "";
+
+  list.forEach(item => {
+    results.innerHTML += `
       <div class="card">
-        <span>${q}</span>
-        <button class="save-btn" onclick="saveClip()">Save</button>
-        <div class="dropdown">
-          <button class="dropbtn">View ▾</button>
-          <div class="dropdown-content">
-            <a href="${yt}" target="_blank">YouTube</a>
-            <a href="${tt}" target="_blank">TikTok</a>
-            <a href="${ig}" target="_blank">Instagram</a>
-            <a href="${fb}" target="_blank">Facebook</a>
-            <a href="${x}" target="_blank">X</a>
+        <div class="card-top">${item.query}</div>
+        <div class="card-actions">
+          ${allowSave ? `<button class="save-btn" onclick='saveClip("${item.query}")'>Save</button>` : ``}
+          <div class="dropdown">
+            <button class="dropbtn">View Results ▾</button>
+            <div class="dropdown-content">
+              <a href="${item.yt}" target="_blank">YouTube</a>
+              <a href="${item.tt}" target="_blank">TikTok</a>
+              <a href="${item.ig}" target="_blank">Instagram</a>
+              <a href="${item.fb}" target="_blank">Facebook</a>
+              <a href="${item.x}" target="_blank">X</a>
+            </div>
           </div>
         </div>
       </div>
     `;
+  });
+}
+
+function saveClip(query) {
+  let saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
+  if (!saved.includes(query)) {
+    saved.push(query);
+    localStorage.setItem("vidrace_saved", JSON.stringify(saved));
+    alert("Saved!");
   }
+}
 
-  function saveClip() {
-    let saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
-    if (!saved.includes(currentQuery)) {
-      saved.push(currentQuery);
-      localStorage.setItem("vidrace_saved", JSON.stringify(saved));
-      alert("Saved!");
-    }
+function showSaved() {
+  setActiveTab(2);
+  let saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
+  if (saved.length === 0) {
+    document.getElementById("results").innerHTML = "<p>No saved clips yet.</p>";
+    return;
   }
+  renderResults(saved.map(q => ({
+    query: q,
+    yt: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
+    tt: "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
+    ig: "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
+    fb: "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q),
+    x:  "https://twitter.com/search?q=" + encodeURIComponent(q)
+  })), false);
+}
 
-  function showSaved() {
-    setActiveTab(2);
-    const saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
-    const results = document.getElementById("results");
+function showTrending() {
+  setActiveTab(1);
+  const trending = [
+    "Streamer breaks desk on live",
+    "Guy drops wedding cake",
+    "Dog interrupts news broadcast",
+    "Kid crashes esports tournament"
+  ];
+  renderResults(trending.map(q => ({
+    query: q,
+    yt: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
+    tt: "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
+    ig: "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
+    fb: "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q),
+    x:  "https://twitter.com/search?q=" + encodeURIComponent(q)
+  })), true);
+}
 
-    if (saved.length === 0) {
-      results.innerHTML = "<p>No saved clips yet.</p>";
-      return;
-    }
-
-    results.innerHTML = saved.map(q => `
-      <div class="card">
-        <span>${q}</span>
-      </div>
-    `).join("");
-  }
-
-  function showSearch() {
-    setActiveTab(0);
-    document.getElementById("results").innerHTML = "";
-  }
-
-  function showTrending() {
-    setActiveTab(1);
-    document.getElementById("results").innerHTML = `
-      <div class="card"><span>Guy drops cake at wedding</span></div>
-      <div class="card"><span>Streamer breaks desk on live</span></div>
-      <div class="card"><span>Dog interrupts news broadcast</span></div>
-    `;
-  }
-
-  function setActiveTab(index) {
-    document.querySelectorAll(".tab").forEach((t,i)=>{
-      t.classList.toggle("active", i === index);
-    });
-  }
+function showSearch() {
+  setActiveTab(0);
+  document.getElementById("results").innerHTML = "";
+}
 </script>
 
 </body>
