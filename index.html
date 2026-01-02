@@ -148,16 +148,20 @@
 
     const yt = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
     const tt = "https://www.tiktok.com/search?q=" + encodeURIComponent(q);
-    const x = "https://twitter.com/search?q=" + encodeURIComponent(q);
+    const ig = "https://www.instagram.com/explore/search/keyword/?q=" + encodeURIComponent(q);
+    const fb = "https://www.facebook.com/search/top?q=" + encodeURIComponent(q);
+    const x  = "https://twitter.com/search?q=" + encodeURIComponent(q);
 
     const results = document.getElementById("results");
 
     results.innerHTML = `
       <div class="card">
         <span>${q}</span>
-        <div>
-          <a href="${yt}" target="_blank">YouTube</a> ·
-          <a href="${tt}" target="_blank">TikTok</a> ·
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          <a href="${yt}" target="_blank">YouTube</a>
+          <a href="${tt}" target="_blank">TikTok</a>
+          <a href="${ig}" target="_blank">Instagram</a>
+          <a href="${fb}" target="_blank">Facebook</a>
           <a href="${x}" target="_blank">X</a>
         </div>
       </div>
