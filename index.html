@@ -1,111 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Vidtrace – Find Original Videos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vidrace — Find Viral Clips by Description</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #0f172a;
       color: #e5e7eb;
-      margin: 0;
-      padding: 0;
     }
+
     header {
       padding: 20px;
       text-align: center;
-      background: #020617;
-      border-bottom: 1px solid #1e293b;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
     }
-    h1 {
+
+    header h1 {
       margin: 0;
-      color: #38bdf8;
+      font-size: 2rem;
+      font-weight: 700;
     }
+
+    header p {
+      margin-top: 8px;
+      opacity: 0.9;
+    }
+
     main {
-      padding: 30px;
-      max-width: 700px;
+      max-width: 900px;
       margin: auto;
+      padding: 20px;
     }
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 12px;
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
       border-radius: 8px;
       border: none;
-      font-size: 16px;
+      font-size: 1rem;
     }
+
     button {
-      margin-top: 15px;
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
+      padding: 14px 20px;
       border-radius: 8px;
-      background: #38bdf8;
-      color: #020617;
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-size: 1rem;
       cursor: pointer;
-      width: 100%;
     }
+
     button:hover {
-      background: #0ea5e9;
+      background: #1d4ed8;
     }
-    .results {
+
+    .tabs {
+      display: flex;
+      gap: 10px;
       margin-top: 30px;
     }
-    .result {
-      background: #020617;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      border: 1px solid #1e293b;
+
+    .tab {
+      padding: 10px 16px;
+      background: #1e293b;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    .result a {
-      color: #38bdf8;
+
+    .tab.active {
+      background: #2563eb;
+    }
+
+    .results {
+      margin-top: 20px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card span {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .card a {
       text-decoration: none;
+      color: #60a5fa;
+      font-weight: 600;
     }
+
     footer {
       text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      color: #94a3b8;
+      padding: 30px 10px;
+      opacity: 0.6;
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Vidtrace</h1>
-  <p>Describe a clip. Find the original video.</p>
+  <h1>Vidrace</h1>
+  <p>Find viral clips using only a description</p>
 </header>
 
 <main>
-  <textarea id="query" placeholder="Example: Guy drops phone while recording prank..."></textarea>
-  <button onclick="search()">Find Original</button>
+
+  <div class="search-box">
+    <input id="query" placeholder="e.g. guy slips on stage during award show" />
+    <button onclick="searchClip()">Search</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Search</div>
+    <div class="tab">Trending</div>
+    <div class="tab">Saved</div>
+  </div>
 
   <div class="results" id="results"></div>
+
 </main>
 
 <footer>
-  This is a prototype. Results are simulated.
+  © 2026 Vidrace • Find the original clip
 </footer>
 
 <script>
-  function search() {
-    const query = document.getElementById("query").value.trim();
+  function searchClip() {
+    const q = document.getElementById("query").value.trim();
+    if (!q) return;
+
+    const url = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+
     const results = document.getElementById("results");
-    results.innerHTML = "";
-
-    if (!query) {
-      results.innerHTML = "<p>Please describe the clip.</p>";
-      return;
-    }
-
     results.innerHTML = `
-      <div class="result">
-        <strong>Possible original video found:</strong><br>
-        <a href="https://www.youtube.com" target="_blank">
-          Original upload related to: "${query}"
-        </a>
+      <div class="card">
+        <span>${q}</span>
+        <a href="${url}" target="_blank">View Results</a>
       </div>
     `;
   }
