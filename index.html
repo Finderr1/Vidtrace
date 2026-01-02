@@ -20,12 +20,6 @@ header {
 
 header h1 {
   font-size: 42px;
-  margin-bottom: 10px;
-}
-
-header p {
-  font-size: 18px;
-  opacity: 0.9;
 }
 
 .container {
@@ -36,70 +30,49 @@ header p {
 
 input {
   width: 100%;
-  padding: 15px;
+  padding: 14px;
   border-radius: 10px;
   border: none;
-  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 button {
   padding: 10px 14px;
-  border: none;
   border-radius: 8px;
+  border: none;
   cursor: pointer;
   font-weight: bold;
 }
 
-.primary {
-  background: #ff9800;
-  color: black;
+.primary { background:#ff9800; }
+.save-btn { background:#2196f3; color:white; }
+.delete-btn { background:red; color:white; }
+
+.tabs button {
+  margin-right: 8px;
   margin-top: 10px;
 }
 
-.tabs button {
-  margin-right: 10px;
-  margin-top: 20px;
-}
-
 .card {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,.1);
   padding: 20px;
   border-radius: 14px;
   margin-top: 15px;
 }
+
+.hidden { display:none; }
 
 .rank {
   font-size: 20px;
   font-weight: bold;
 }
 
-.best {
-  color: #4caf50;
-}
+.best { color:#4caf50; }
 
-.dropdown {
-  margin-top: 10px;
-}
-
-.dropdown select {
+select {
   padding: 8px;
   border-radius: 6px;
-}
-
-.save-btn {
-  background: #2196f3;
-  color: white;
-  margin-left: 10px;
-}
-
-.delete-btn {
-  background: red;
-  color: white;
-  margin-left: 10px;
-}
-
-.hidden {
-  display: none;
+  margin-top: 8px;
 }
 </style>
 </head>
@@ -108,224 +81,195 @@ button {
 
 <header>
   <h1>🎬 Vidrace</h1>
-  <p>Describe a moment. Find where the clip lives.</p>
+  <p>Describe a moment. Find the clip.</p>
 </header>
 
 <div class="container">
 
-  <input id="query" placeholder="e.g. guy slips on ice during interview">
-  <button class="primary" onclick="searchClip()">Search</button>
+<input id="query" placeholder="e.g. interview goes wrong">
+<button class="primary" onclick="searchClip()">Search</button>
 
-  <div class="tabs">
-    <button onclick="showTab('results')">Results</button>
-    <button onclick="showTab('saved')">Saved</button>
-    <button onclick="showTab('trending')">Trending</button>
-    <button onclick="showTab('community')">Community</button>
-  </div>
+<div class="tabs">
+  <button onclick="showTab('results')">Results</button>
+  <button onclick="showTab('saved')">Saved</button>
+  <button onclick="showTab('trending')">Trending</button>
+  <button onclick="showTab('community')">Community</button>
+</div>
 
-  <div id="results"></div>
-  <div id="saved" class="hidden"></div>
-  <div id="trending" class="hidden"></div>
-  <div id="community" class="hidden"></div>
+<div id="results"></div>
+<div id="saved" class="hidden"></div>
+<div id="trending" class="hidden"></div>
+<div id="community" class="hidden"></div>
 
 </div>
 
 <script>
+/* PLATFORMS */
 const platforms = {
-  youtube: q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
-  tiktok: q => "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
-  instagram: q => "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
-  facebook: q => "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q),
-  x: q => "https://twitter.com/search?q=" + encodeURIComponent(q)
+  youtube: q => "https://www.youtube.com/results?search_query="+encodeURIComponent(q),
+  tiktok: q => "https://www.tiktok.com/search?q="+encodeURIComponent(q),
+  instagram: q => "https://www.google.com/search?q="+encodeURIComponent("site:instagram.com "+q),
+  facebook: q => "https://www.google.com/search?q="+encodeURIComponent("site:facebook.com "+q),
+  x: q => "https://twitter.com/search?q="+encodeURIComponent(q)
 };
 
-function aiRanking(q) {
-  q = q.toLowerCase();
-  if (q.includes("dance") || q.includes("prank") || q.includes("funny"))
+/* AI SORTING */
+function aiRanking(q){
+  q=q.toLowerCase();
+  if(q.includes("dance")||q.includes("funny")||q.includes("prank"))
     return ["tiktok","youtube","instagram","facebook","x"];
-  if (q.includes("interview") || q.includes("podcast") || q.includes("full"))
+  if(q.includes("interview")||q.includes("podcast"))
     return ["youtube","x","facebook","instagram","tiktok"];
   return ["youtube","tiktok","instagram","facebook","x"];
 }
 
-function searchClip() {
-  const q = document.getElementById("query").value.trim();
-  if (!q) return;
+/* SEARCH */
+function searchClip(){
+  const q=document.getElementById("query").value.trim();
+  if(!q) return;
 
-  const ranked = aiRanking(q);
-  let html = `<h2>Results</h2>`;
+  const ranked=aiRanking(q);
+  let html="<h2>Results</h2>";
 
   ranked.forEach((p,i)=>{
-    html += `
-      <div class="card">
-        <div class="rank ${i===0?'best':''}">
-          #${i+1} ${p.toUpperCase()} ${i===0?'(BEST MATCH)':''}
-        </div>
-    `;
+    html+=`
+    <div class="card">
+      <div class="rank ${i===0?'best':''}">
+        #${i+1} ${p.toUpperCase()} ${i===0?'(BEST)':''}
+      </div>
 
-    // ✅ YouTube thumbnail preview
-    if (p === "youtube") {
-      html += `
-        <iframe 
-          width="100%" 
-          height="220"
-          style="border-radius:12px;margin-top:10px"
-          src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}"
-          allowfullscreen>
-        </iframe>
-        <p style="opacity:.8;font-size:14px">Preview from YouTube</p>
-      `;
-    }
+      ${p==="youtube" ? `
+      <iframe width="100%" height="220"
+      src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}"
+      style="border-radius:12px;margin-top:10px"></iframe>` : ``}
 
-    html += `
-        <div class="dropdown">
-          <select onchange="openLink(this.value,'${q}')">
-            <option>Select platform</option>
-            ${Object.keys(platforms).map(x=>`<option value="${x}">${x}</option>`).join("")}
-          </select>
-          <button class="save-btn" onclick="saveClip('${q}')">Save</button>
-        </div>
-      </div>`;
+      <select onchange="openLink(this.value,'${q}')">
+        <option>Open on</option>
+        ${Object.keys(platforms).map(x=>`<option value="${x}">${x}</option>`).join("")}
+      </select>
+
+      <button class="save-btn" onclick="saveClip('${q}')">Save</button>
+    </div>`;
   });
 
-  document.getElementById("results").innerHTML = html;
-  showTab('results');
+  results.innerHTML=html;
+  showTab("results");
 }
 
+/* OPEN LINK */
 function openLink(p,q){
   if(!p) return;
   window.open(platforms[p](q),'_blank');
 }
 
+/* SAVED */
 function saveClip(q){
-  const saved = JSON.parse(localStorage.getItem("saved")||"[]");
-  if(!saved.includes(q)) saved.push(q);
-  localStorage.setItem("saved",JSON.stringify(saved));
+  const s=JSON.parse(localStorage.getItem("saved")||"[]");
+  if(!s.includes(q)) s.push(q);
+  localStorage.setItem("saved",JSON.stringify(s));
   loadSaved();
 }
 
 function deleteClip(i){
-  const saved = JSON.parse(localStorage.getItem("saved"));
-  saved.splice(i,1);
-  localStorage.setItem("saved",JSON.stringify(saved));
+  const s=JSON.parse(localStorage.getItem("saved"));
+  s.splice(i,1);
+  localStorage.setItem("saved",JSON.stringify(s));
   loadSaved();
 }
 
 function loadSaved(){
-  const saved = JSON.parse(localStorage.getItem("saved")||"[]");
-  let html = `<h2>Saved Clips</h2>`;
+  const s=JSON.parse(localStorage.getItem("saved")||"[]");
+  let html="<h2>Saved</h2>";
+  s.forEach((q,i)=>{
+    html+=`
+    <div class="card">
+      <b>${q}</b>
+      <iframe width="100%" height="200"
+      src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}"
+      style="border-radius:12px;margin-top:10px"></iframe>
 
-  saved.forEach((q,i)=>{
-    html += `
-      <div class="card">
-        <b>${q}</b>
-        <iframe 
-          width="100%" 
-          height="200"
-          style="border-radius:12px;margin-top:10px"
-          src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}">
-        </iframe>
+      <select onchange="openLink(this.value,'${q}')">
+        <option>Find again</option>
+        ${Object.keys(platforms).map(p=>`<option value="${p}">${p}</option>`).join("")}
+      </select>
 
-        <div class="dropdown">
-          <select onchange="openLink(this.value,'${q}')">
-            <option>Find again</option>
-            ${Object.keys(platforms).map(p=>`<option value="${p}">${p}</option>`).join("")}
-          </select>
-          <button class="delete-btn" onclick="deleteClip(${i})">Delete</button>
-        </div>
-      </div>`;
+      <button class="delete-btn" onclick="deleteClip(${i})">Delete</button>
+    </div>`;
   });
-
-  document.getElementById("saved").innerHTML = html;
+  saved.innerHTML=html;
 }
 
+/* TRENDING */
 function loadTrending(){
-  const trends = [
+  const t=[
     "celebrity falls on stage",
-    "funny zoom meeting fail",
-    "player scores insane goal",
+    "funny zoom fail",
+    "insane goal reaction",
     "interview goes wrong",
-    "crowd reaction moment"
+    "crowd goes wild"
   ];
-
-  let html = `<h2>Trending</h2>`;
-  trends.forEach(q=>{
-    html += `
-      <div class="card">
-        <b>${q}</b>
-        <iframe 
-          width="100%" 
-          height="200"
-          style="border-radius:12px;margin-top:10px"
-          src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}">
-        </iframe>
-        <select onchange="openLink(this.value,'${q}')">
-          <option>View on</option>
-          ${Object.keys(platforms).map(p=>`<option value="${p}">${p}</option>`).join("")}
-        </select>
-      </div>`;
+  let html="<h2>Trending</h2>";
+  t.forEach(q=>{
+    html+=`
+    <div class="card">
+      <b>${q}</b>
+      <iframe width="100%" height="200"
+      src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}"
+      style="border-radius:12px;margin-top:10px"></iframe>
+    </div>`;
   });
-
-  document.getElementById("trending").innerHTML = html;
+  trending.innerHTML=html;
 }
 
+/* COMMUNITY */
+function loadCommunity(){
+  const c=JSON.parse(localStorage.getItem("community")||"[]");
+  let html=`
+  <h2>🌍 Community Clips</h2>
+  <div class="card">
+    <input id="cDesc" placeholder="Clip description">
+    <input id="cLink" placeholder="Video link">
+    <button class="save-btn" onclick="submitClip()">Submit</button>
+  </div>`;
+  c.forEach((x,i)=>{
+    html+=`
+    <div class="card">
+      <b>${x.desc}</b><br><br>
+      <a href="${x.link}" target="_blank">▶ Watch</a>
+      <button class="delete-btn" onclick="deleteCommunity(${i})">Delete</button>
+    </div>`;
+  });
+  community.innerHTML=html;
+}
+
+function submitClip(){
+  const d=cDesc.value.trim();
+  const l=cLink.value.trim();
+  if(!d||!l) return alert("Fill everything");
+  const c=JSON.parse(localStorage.getItem("community")||"[]");
+  c.unshift({desc:d,link:l});
+  localStorage.setItem("community",JSON.stringify(c));
+  loadCommunity();
+}
+
+function deleteCommunity(i){
+  const c=JSON.parse(localStorage.getItem("community"));
+  c.splice(i,1);
+  localStorage.setItem("community",JSON.stringify(c));
+  loadCommunity();
+}
+
+/* TABS */
 function showTab(tab){
-  ["results","saved","trending"].forEach(t=>{
+  ["results","saved","trending","community"].forEach(t=>{
     document.getElementById(t).classList.add("hidden");
   });
   document.getElementById(tab).classList.remove("hidden");
 }
 
+/* INIT */
 loadSaved();
 loadTrending();
-function loadCommunity() {
-  const clips = JSON.parse(localStorage.getItem("community") || "[]");
-
-  let html = `
-    <h2>🌍 Community Clips</h2>
-
-    <div class="card">
-      <input id="cDesc" placeholder="What happens in the clip?">
-      <input id="cLink" placeholder="Paste video link (YouTube, TikTok, etc)">
-      <button class="save-btn" onclick="submitClip()">Submit Clip</button>
-    </div>
-  `;
-
-  clips.forEach((c, i) => {
-    html += `
-      <div class="card">
-        <b>${c.desc}</b><br><br>
-        <a href="${c.link}" target="_blank">▶ Watch Clip</a>
-        <button class="delete-btn" onclick="deleteCommunity(${i})">Delete</button>
-      </div>
-    `;
-  });
-
-  document.getElementById("community").innerHTML = html;
-}
-
-function submitClip() {
-  const desc = document.getElementById("cDesc").value.trim();
-  const link = document.getElementById("cLink").value.trim();
-
-  if (!desc || !link) {
-    alert("Please fill everything");
-    return;
-  }
-
-  const clips = JSON.parse(localStorage.getItem("community") || "[]");
-  clips.unshift({ desc, link });
-  localStorage.setItem("community", JSON.stringify(clips));
-
-  loadCommunity();
-}
-
-function deleteCommunity(i) {
-  const clips = JSON.parse(localStorage.getItem("community"));
-  clips.splice(i, 1);
-  localStorage.setItem("community", JSON.stringify(clips));
-  loadCommunity();
-}
 loadCommunity();
 </script>
 
