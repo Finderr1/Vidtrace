@@ -140,7 +140,7 @@ const platforms = {
 function aiRanking(q) {
   q = q.toLowerCase();
   if (q.includes("dance") || q.includes("prank") || q.includes("funny"))
-    return ["tiktok","instagram","youtube","facebook","x"];
+    return ["tiktok","youtube","instagram","facebook","x"];
   if (q.includes("interview") || q.includes("podcast") || q.includes("full"))
     return ["youtube","x","facebook","instagram","tiktok"];
   return ["youtube","tiktok","instagram","facebook","x"];
@@ -156,7 +156,26 @@ function searchClip() {
   ranked.forEach((p,i)=>{
     html += `
       <div class="card">
-        <div class="rank ${i===0?'best':''}">#${i+1} ${p.toUpperCase()} ${i===0?'(BEST MATCH)':''}</div>
+        <div class="rank ${i===0?'best':''}">
+          #${i+1} ${p.toUpperCase()} ${i===0?'(BEST MATCH)':''}
+        </div>
+    `;
+
+    // ✅ YouTube thumbnail preview
+    if (p === "youtube") {
+      html += `
+        <iframe 
+          width="100%" 
+          height="220"
+          style="border-radius:12px;margin-top:10px"
+          src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}"
+          allowfullscreen>
+        </iframe>
+        <p style="opacity:.8;font-size:14px">Preview from YouTube</p>
+      `;
+    }
+
+    html += `
         <div class="dropdown">
           <select onchange="openLink(this.value,'${q}')">
             <option>Select platform</option>
@@ -197,7 +216,14 @@ function loadSaved(){
   saved.forEach((q,i)=>{
     html += `
       <div class="card">
-        ${q}
+        <b>${q}</b>
+        <iframe 
+          width="100%" 
+          height="200"
+          style="border-radius:12px;margin-top:10px"
+          src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}">
+        </iframe>
+
         <div class="dropdown">
           <select onchange="openLink(this.value,'${q}')">
             <option>Find again</option>
@@ -224,7 +250,13 @@ function loadTrending(){
   trends.forEach(q=>{
     html += `
       <div class="card">
-        ${q}
+        <b>${q}</b>
+        <iframe 
+          width="100%" 
+          height="200"
+          style="border-radius:12px;margin-top:10px"
+          src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(q)}">
+        </iframe>
         <select onchange="openLink(this.value,'${q}')">
           <option>View on</option>
           ${Object.keys(platforms).map(p=>`<option value="${p}">${p}</option>`).join("")}
