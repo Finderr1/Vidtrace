@@ -194,8 +194,9 @@
 
     const yt = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
     const tt = "https://www.tiktok.com/search?q=" + encodeURIComponent(q);
-    const ig = "https://www.instagram.com/explore/search/keyword/?q=" + encodeURIComponent(q);
-    const fb = "https://www.facebook.com/search/top?q=" + encodeURIComponent(q);
+
+    const ig = "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q);
+    const fb = "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q);
     const x  = "https://twitter.com/search?q=" + encodeURIComponent(q);
 
     const results = document.getElementById("results");
