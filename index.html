@@ -28,7 +28,6 @@
     header p {
       margin-top: 8px;
       opacity: 0.95;
-      font-size: 1rem;
     }
 
     main {
@@ -60,10 +59,6 @@
       font-size: 1rem;
       cursor: pointer;
       font-weight: 600;
-    }
-
-    button:hover {
-      background: #1d4ed8;
     }
 
     .tabs {
@@ -100,12 +95,11 @@
     }
 
     .card span {
+      flex: 1;
       font-size: 0.95rem;
       opacity: 0.9;
-      flex: 1;
     }
 
-    /* Dropdown */
     .dropdown {
       position: relative;
     }
@@ -117,8 +111,7 @@
       padding: 8px 14px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.85rem;
     }
 
     .dropdown-content {
@@ -130,7 +123,6 @@
       border-radius: 10px;
       margin-top: 8px;
       z-index: 1;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       overflow: hidden;
     }
 
@@ -139,7 +131,7 @@
       padding: 12px 14px;
       text-decoration: none;
       display: block;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .dropdown-content a:hover {
@@ -148,6 +140,16 @@
 
     .dropdown:hover .dropdown-content {
       display: block;
+    }
+
+    .save-btn {
+      background: #22c55e;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
     }
 
     footer {
@@ -174,9 +176,9 @@
   </div>
 
   <div class="tabs">
-    <div class="tab active">Search</div>
-    <div class="tab">Trending</div>
-    <div class="tab">Saved</div>
+    <div class="tab active" onclick="showSearch()">Search</div>
+    <div class="tab" onclick="showTrending()">Trending</div>
+    <div class="tab" onclick="showSaved()">Saved</div>
   </div>
 
   <div class="results" id="results"></div>
@@ -184,38 +186,85 @@
 </main>
 
 <footer>
-  © 2026 Vidrace • Discover the original clip
+  © 2026 Vidrace
 </footer>
 
 <script>
+  let currentQuery = "";
+
   function searchClip() {
     const q = document.getElementById("query").value.trim();
     if (!q) return;
+    currentQuery = q;
 
     const yt = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
     const tt = "https://www.tiktok.com/search?q=" + encodeURIComponent(q);
-
     const ig = "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q);
     const fb = "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q);
     const x  = "https://twitter.com/search?q=" + encodeURIComponent(q);
 
-    const results = document.getElementById("results");
-
-    results.innerHTML = `
+    document.getElementById("results").innerHTML = `
       <div class="card">
         <span>${q}</span>
+        <button class="save-btn" onclick="saveClip()">Save</button>
         <div class="dropdown">
-          <button class="dropbtn">View Results ▾</button>
+          <button class="dropbtn">View ▾</button>
           <div class="dropdown-content">
             <a href="${yt}" target="_blank">YouTube</a>
             <a href="${tt}" target="_blank">TikTok</a>
             <a href="${ig}" target="_blank">Instagram</a>
             <a href="${fb}" target="_blank">Facebook</a>
-            <a href="${x}" target="_blank">X (Twitter)</a>
+            <a href="${x}" target="_blank">X</a>
           </div>
         </div>
       </div>
     `;
+  }
+
+  function saveClip() {
+    let saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
+    if (!saved.includes(currentQuery)) {
+      saved.push(currentQuery);
+      localStorage.setItem("vidrace_saved", JSON.stringify(saved));
+      alert("Saved!");
+    }
+  }
+
+  function showSaved() {
+    setActiveTab(2);
+    const saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
+    const results = document.getElementById("results");
+
+    if (saved.length === 0) {
+      results.innerHTML = "<p>No saved clips yet.</p>";
+      return;
+    }
+
+    results.innerHTML = saved.map(q => `
+      <div class="card">
+        <span>${q}</span>
+      </div>
+    `).join("");
+  }
+
+  function showSearch() {
+    setActiveTab(0);
+    document.getElementById("results").innerHTML = "";
+  }
+
+  function showTrending() {
+    setActiveTab(1);
+    document.getElementById("results").innerHTML = `
+      <div class="card"><span>Guy drops cake at wedding</span></div>
+      <div class="card"><span>Streamer breaks desk on live</span></div>
+      <div class="card"><span>Dog interrupts news broadcast</span></div>
+    `;
+  }
+
+  function setActiveTab(index) {
+    document.querySelectorAll(".tab").forEach((t,i)=>{
+      t.classList.toggle("active", i === index);
+    });
   }
 </script>
 
