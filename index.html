@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vidrace — Find Viral Clips by Description</title>
+
   <style>
     body {
       margin: 0;
@@ -13,26 +14,27 @@
     }
 
     header {
-      padding: 20px;
+      padding: 28px 16px;
       text-align: center;
       background: linear-gradient(135deg, #2563eb, #7c3aed);
     }
 
     header h1 {
       margin: 0;
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
     }
 
     header p {
       margin-top: 8px;
-      opacity: 0.9;
+      opacity: 0.95;
+      font-size: 1rem;
     }
 
     main {
       max-width: 900px;
       margin: auto;
-      padding: 20px;
+      padding: 24px 16px;
     }
 
     .search-box {
@@ -44,19 +46,20 @@
     input {
       flex: 1;
       padding: 14px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: none;
       font-size: 1rem;
     }
 
     button {
-      padding: 14px 20px;
-      border-radius: 8px;
+      padding: 14px 18px;
+      border-radius: 10px;
       border: none;
       background: #2563eb;
       color: white;
       font-size: 1rem;
       cursor: pointer;
+      font-weight: 600;
     }
 
     button:hover {
@@ -66,14 +69,15 @@
     .tabs {
       display: flex;
       gap: 10px;
-      margin-top: 30px;
+      margin-top: 28px;
     }
 
     .tab {
       padding: 10px 16px;
       background: #1e293b;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 0.9rem;
     }
 
     .tab.active {
@@ -81,38 +85,80 @@
     }
 
     .results {
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .card {
       background: #1e293b;
       padding: 16px;
-      border-radius: 10px;
-      margin-bottom: 12px;
+      border-radius: 12px;
+      margin-bottom: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
 
     .card span {
       font-size: 0.95rem;
       opacity: 0.9;
+      flex: 1;
     }
 
-    .card a {
-      text-decoration: none;
-      color: #60a5fa;
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropbtn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
       font-weight: 600;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #1e293b;
+      min-width: 170px;
+      border-radius: 10px;
+      margin-top: 8px;
+      z-index: 1;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .dropdown-content a {
+      color: #e5e7eb;
+      padding: 12px 14px;
+      text-decoration: none;
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #334155;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
     }
 
     footer {
       text-align: center;
-      padding: 30px 10px;
+      padding: 32px 10px;
       opacity: 0.6;
       font-size: 0.85rem;
     }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -138,7 +184,7 @@
 </main>
 
 <footer>
-  © 2026 Vidrace • Find the original clip
+  © 2026 Vidrace • Discover the original clip
 </footer>
 
 <script>
@@ -157,12 +203,15 @@
     results.innerHTML = `
       <div class="card">
         <span>${q}</span>
-        <div style="display:flex; flex-wrap:wrap; gap:10px;">
-          <a href="${yt}" target="_blank">YouTube</a>
-          <a href="${tt}" target="_blank">TikTok</a>
-          <a href="${ig}" target="_blank">Instagram</a>
-          <a href="${fb}" target="_blank">Facebook</a>
-          <a href="${x}" target="_blank">X</a>
+        <div class="dropdown">
+          <button class="dropbtn">View Results ▾</button>
+          <div class="dropdown-content">
+            <a href="${yt}" target="_blank">YouTube</a>
+            <a href="${tt}" target="_blank">TikTok</a>
+            <a href="${ig}" target="_blank">Instagram</a>
+            <a href="${fb}" target="_blank">Facebook</a>
+            <a href="${x}" target="_blank">X (Twitter)</a>
+          </div>
         </div>
       </div>
     `;
