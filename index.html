@@ -146,13 +146,20 @@
     const q = document.getElementById("query").value.trim();
     if (!q) return;
 
-    const url = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+    const yt = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+    const tt = "https://www.tiktok.com/search?q=" + encodeURIComponent(q);
+    const x = "https://twitter.com/search?q=" + encodeURIComponent(q);
 
     const results = document.getElementById("results");
+
     results.innerHTML = `
       <div class="card">
         <span>${q}</span>
-        <a href="${url}" target="_blank">View Results</a>
+        <div>
+          <a href="${yt}" target="_blank">YouTube</a> ·
+          <a href="${tt}" target="_blank">TikTok</a> ·
+          <a href="${x}" target="_blank">X</a>
+        </div>
       </div>
     `;
   }
