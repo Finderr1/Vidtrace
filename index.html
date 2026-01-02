@@ -120,11 +120,13 @@ button {
     <button onclick="showTab('results')">Results</button>
     <button onclick="showTab('saved')">Saved</button>
     <button onclick="showTab('trending')">Trending</button>
+    <button onclick="showTab('community')">Community</button>
   </div>
 
   <div id="results"></div>
   <div id="saved" class="hidden"></div>
   <div id="trending" class="hidden"></div>
+  <div id="community" class="hidden"></div>
 
 </div>
 
@@ -276,6 +278,54 @@ function showTab(tab){
 
 loadSaved();
 loadTrending();
+function loadCommunity() {
+  const clips = JSON.parse(localStorage.getItem("community") || "[]");
+
+  let html = `
+    <h2>🌍 Community Clips</h2>
+
+    <div class="card">
+      <input id="cDesc" placeholder="What happens in the clip?">
+      <input id="cLink" placeholder="Paste video link (YouTube, TikTok, etc)">
+      <button class="save-btn" onclick="submitClip()">Submit Clip</button>
+    </div>
+  `;
+
+  clips.forEach((c, i) => {
+    html += `
+      <div class="card">
+        <b>${c.desc}</b><br><br>
+        <a href="${c.link}" target="_blank">▶ Watch Clip</a>
+        <button class="delete-btn" onclick="deleteCommunity(${i})">Delete</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("community").innerHTML = html;
+}
+
+function submitClip() {
+  const desc = document.getElementById("cDesc").value.trim();
+  const link = document.getElementById("cLink").value.trim();
+
+  if (!desc || !link) {
+    alert("Please fill everything");
+    return;
+  }
+
+  const clips = JSON.parse(localStorage.getItem("community") || "[]");
+  clips.unshift({ desc, link });
+  localStorage.setItem("community", JSON.stringify(clips));
+
+  loadCommunity();
+}
+
+function deleteCommunity(i) {
+  const clips = JSON.parse(localStorage.getItem("community"));
+  clips.splice(i, 1);
+  localStorage.setItem("community", JSON.stringify(clips));
+  loadCommunity();
+}
 </script>
 
 </body>
