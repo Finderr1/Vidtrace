@@ -2,163 +2,101 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vidrace — Find Viral Clips</title>
+<title>Vidrace – Find Viral Clips</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #0f172a;
-  color: #e5e7eb;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
 }
 
 header {
+  padding: 50px 20px;
   text-align: center;
-  padding: 30px 16px;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
 
 header h1 {
-  margin: 0;
-  font-size: 2.3rem;
-  font-weight: 800;
+  font-size: 42px;
+  margin-bottom: 10px;
 }
 
 header p {
-  margin-top: 8px;
-  opacity: 0.95;
+  opacity: 0.9;
+  font-size: 18px;
 }
 
-main {
+.container {
   max-width: 900px;
   margin: auto;
-  padding: 24px 16px;
-}
-
-.search-box {
-  display: flex;
-  gap: 10px;
+  padding: 20px;
 }
 
 input {
-  flex: 1;
-  padding: 14px;
-  border-radius: 10px;
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 8px;
   border: none;
-  font-size: 1rem;
+  margin-bottom: 10px;
 }
 
 button {
-  padding: 14px 18px;
-  border-radius: 10px;
+  padding: 12px 18px;
   border: none;
-  background: #2563eb;
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-top: 26px;
-}
-
-.tab {
-  padding: 10px 16px;
-  background: #1e293b;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-weight: bold;
 }
 
-.tab.active {
-  background: #2563eb;
-}
-
-.results {
-  margin-top: 24px;
+.primary {
+  background: #ff9800;
+  color: black;
 }
 
 .card {
-  background: #1e293b;
-  padding: 18px;
-  border-radius: 14px;
-  margin-bottom: 16px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
 }
 
-.card-top {
-  font-size: 1rem;
-  margin-bottom: 14px;
-  opacity: 0.95;
+.platforms a {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
 }
 
-.card-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+.platforms a.best {
+  background: #4caf50;
+  color: black;
 }
 
 .save-btn {
-  background: #22c55e;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  color: #022c22;
-}
-
-.dropdown {
-  position: relative;
-}
-
-.dropbtn {
-  background: #2563eb;
+  background: #2196f3;
   color: white;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
+  margin-top: 10px;
 }
 
-.dropdown-content {
+.delete-btn {
+  background: red;
+  color: white;
+  margin-left: 10px;
+}
+
+.tabs button {
+  margin-right: 10px;
+  margin-top: 20px;
+}
+
+.hidden {
   display: none;
-  position: absolute;
-  right: 0;
-  background: #1e293b;
-  border-radius: 12px;
-  margin-top: 8px;
-  min-width: 180px;
-  overflow: hidden;
-  z-index: 10;
-}
-
-.dropdown-content a {
-  display: block;
-  padding: 12px 14px;
-  text-decoration: none;
-  color: #e5e7eb;
-}
-
-.dropdown-content a:hover {
-  background: #334155;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-footer {
-  text-align: center;
-  padding: 30px;
-  opacity: 0.6;
-  font-size: 0.85rem;
 }
 </style>
 </head>
@@ -166,129 +104,99 @@ footer {
 <body>
 
 <header>
-  <h1>Vidrace</h1>
-  <p>Find viral clips using only a description</p>
+  <h1>🎬 Vidrace</h1>
+  <p>Describe a moment. Find the viral clip.</p>
 </header>
 
-<main>
+<div class="container">
 
-<div class="search-box">
-  <input id="query" placeholder="e.g. guy slips on stage during award show">
-  <button onclick="searchClip()">Search</button>
+  <input id="query" placeholder="e.g. guy slips on ice during interview">
+  <button class="primary" onclick="searchClip()">Search</button>
+
+  <div class="tabs">
+    <button onclick="showTab('results')">Results</button>
+    <button onclick="showTab('saved')">Saved</button>
+  </div>
+
+  <div id="results"></div>
+  <div id="saved" class="hidden"></div>
+
 </div>
-
-<div class="tabs">
-  <div class="tab active" onclick="showSearch()">Search</div>
-  <div class="tab" onclick="showTrending()">Trending</div>
-  <div class="tab" onclick="showSaved()">Saved</div>
-</div>
-
-<div class="results" id="results"></div>
-
-</main>
-
-<footer>© 2026 Vidrace</footer>
 
 <script>
-let currentResults = [];
-
-function setActiveTab(i) {
-  document.querySelectorAll(".tab").forEach((t,idx)=>{
-    t.classList.toggle("active", idx === i);
-  });
+function aiRank(q) {
+  q = q.toLowerCase();
+  if (q.includes("dance") || q.includes("prank") || q.includes("funny")) return "tiktok";
+  if (q.includes("interview") || q.includes("full") || q.includes("podcast")) return "youtube";
+  if (q.includes("photo") || q.includes("story")) return "instagram";
+  return "youtube";
 }
 
 function searchClip() {
-  setActiveTab(0);
   const q = document.getElementById("query").value.trim();
   if (!q) return;
 
-  currentResults = [{
-    query: q,
-    yt: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
-    tt: "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
-    ig: "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
-    fb: "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q),
-    x:  "https://twitter.com/search?q=" + encodeURIComponent(q)
-  }];
+  const best = aiRank(q);
 
-  renderResults(currentResults, true);
+  const links = {
+    youtube: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
+    tiktok: "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
+    instagram: "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
+    facebook: "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q)
+  };
+
+  let html = `<div class="card">
+    <h3>🔍 ${q}</h3>
+    <p>AI Best Match: <b>${best.toUpperCase()}</b></p>
+    <div class="platforms">`;
+
+  for (let p in links) {
+    html += `<a href="${links[p]}" target="_blank" class="${p === best ? "best" : ""}">${p}</a>`;
+  }
+
+  html += `</div>
+    <button class="save-btn" onclick="saveClip('${q}')">Save</button>
+  </div>`;
+
+  document.getElementById("results").innerHTML = html;
+  showTab('results');
 }
 
-function renderResults(list, allowSave) {
-  const results = document.getElementById("results");
-  results.innerHTML = "";
+function saveClip(q) {
+  const saved = JSON.parse(localStorage.getItem("saved") || "[]");
+  saved.push(q);
+  localStorage.setItem("saved", JSON.stringify(saved));
+  loadSaved();
+}
 
-  list.forEach(item => {
-    results.innerHTML += `
-      <div class="card">
-        <div class="card-top">${item.query}</div>
-        <div class="card-actions">
-          ${allowSave ? `<button class="save-btn" onclick='saveClip("${item.query}")'>Save</button>` : ``}
-          <div class="dropdown">
-            <button class="dropbtn">View Results ▾</button>
-            <div class="dropdown-content">
-              <a href="${item.yt}" target="_blank">YouTube</a>
-              <a href="${item.tt}" target="_blank">TikTok</a>
-              <a href="${item.ig}" target="_blank">Instagram</a>
-              <a href="${item.fb}" target="_blank">Facebook</a>
-              <a href="${item.x}" target="_blank">X</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+function deleteClip(i) {
+  const saved = JSON.parse(localStorage.getItem("saved"));
+  saved.splice(i,1);
+  localStorage.setItem("saved", JSON.stringify(saved));
+  loadSaved();
+}
+
+function loadSaved() {
+  const saved = JSON.parse(localStorage.getItem("saved") || "[]");
+  let html = "<h2>⭐ Saved Clips</h2>";
+
+  saved.forEach((q,i)=>{
+    html += `<div class="card">
+      ${q}
+      <button class="delete-btn" onclick="deleteClip(${i})">Delete</button>
+    </div>`;
   });
+
+  document.getElementById("saved").innerHTML = html;
 }
 
-function saveClip(query) {
-  let saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
-  if (!saved.includes(query)) {
-    saved.push(query);
-    localStorage.setItem("vidrace_saved", JSON.stringify(saved));
-    alert("Saved!");
-  }
+function showTab(tab) {
+  document.getElementById("results").classList.add("hidden");
+  document.getElementById("saved").classList.add("hidden");
+  document.getElementById(tab).classList.remove("hidden");
 }
 
-function showSaved() {
-  setActiveTab(2);
-  let saved = JSON.parse(localStorage.getItem("vidrace_saved")) || [];
-  if (saved.length === 0) {
-    document.getElementById("results").innerHTML = "<p>No saved clips yet.</p>";
-    return;
-  }
-  renderResults(saved.map(q => ({
-    query: q,
-    yt: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
-    tt: "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
-    ig: "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
-    fb: "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q),
-    x:  "https://twitter.com/search?q=" + encodeURIComponent(q)
-  })), false);
-}
-
-function showTrending() {
-  setActiveTab(1);
-  const trending = [
-    "Streamer breaks desk on live",
-    "Guy drops wedding cake",
-    "Dog interrupts news broadcast",
-    "Kid crashes esports tournament"
-  ];
-  renderResults(trending.map(q => ({
-    query: q,
-    yt: "https://www.youtube.com/results?search_query=" + encodeURIComponent(q),
-    tt: "https://www.tiktok.com/search?q=" + encodeURIComponent(q),
-    ig: "https://www.google.com/search?q=" + encodeURIComponent("site:instagram.com " + q),
-    fb: "https://www.google.com/search?q=" + encodeURIComponent("site:facebook.com " + q),
-    x:  "https://twitter.com/search?q=" + encodeURIComponent(q)
-  })), true);
-}
-
-function showSearch() {
-  setActiveTab(0);
-  document.getElementById("results").innerHTML = "";
-}
+loadSaved();
 </script>
 
 </body>
